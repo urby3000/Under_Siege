@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/weapon_test.unity
+- path: Assets/test_monsterji.unity
   isLoaded: 1
   isActive: 1
