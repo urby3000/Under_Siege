@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/weapon_testing/weapon_test.unity
+- path: Assets/UI/test_menu.unity
   isLoaded: 1
   isActive: 1
