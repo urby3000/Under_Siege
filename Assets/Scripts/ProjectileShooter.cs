@@ -1,31 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ProjectileShooter : MonoBehaviour {
+public class ProjectileShooter : MonoBehaviour
+{
 
-    GameObject prefab;
-
+    GameObject prefab_projectile;
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
-        Debug.Log("I am alive!");
-        prefab = Resources.Load("projectile") as GameObject;
+        prefab_projectile = Resources.Load("projectile") as GameObject;
+
+    }
     
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        if (Input.GetMouseButtonDown(0)) {
-            
-                GameObject projectile = Instantiate(prefab) as GameObject;
-                projectile.transform.position = new Vector3(-9.79f, -0.385f, -2.08f);
-                Rigidbody rb = projectile.GetComponent<Rigidbody>();
+    void Update()
+    {
 
-                rb.AddForce(new Vector3(20, 0, 0) * (300));
 
-            
+    }
+    void FixedUpdate()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+
+            GameObject projectile = Instantiate(prefab_projectile) as GameObject;
+            projectile.transform.position = GameObject.Find("weapon").transform.position + new Vector3(0, 0.5f, 0);
+
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray.origin, ray.direction, out hit, Mathf.Infinity))
+            {
+               /* Debug.DrawRay(ray.origin, ray.direction * 1000);
+                Debug.Log(hit.point);*/
+            }
+            projectile.transform.LookAt(hit.point);
+            hit.point = hit.point.normalized;
+            Rigidbody rb = projectile.GetComponent<Rigidbody>();
+            rb.velocity = hit.point * 100;
 
         }
+
     }
+
+
+
 }
