@@ -3,7 +3,6 @@ using System.Collections;
 
 public class ProjectileShooter : MonoBehaviour
 {
-
     GameObject prefab_projectile;
 
     // Use this for initialization
@@ -41,7 +40,6 @@ public class ProjectileShooter : MonoBehaviour
         }
 
     }
-
 
 
 }
