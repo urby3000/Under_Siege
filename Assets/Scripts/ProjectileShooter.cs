@@ -7,8 +7,9 @@ public class ProjectileShooter : MonoBehaviour
 {
     bool freeze_enemies_attack = false;
     List<GameObject> enemies_freeze_attack_list = new List<GameObject>();
-    List<GameObject> freeze_attack_projectiles = new List<GameObject>();
-    int freezed_enemies=0;
+    List<GameObject> ice_floor_list = new List<GameObject>();
+    float freeze_time;
+    float freeze_time_delay = 3f;
 
     GameObject prefab_projectile;
     GameObject prefab_icyprojectile;
@@ -41,32 +42,6 @@ public class ProjectileShooter : MonoBehaviour
     }
     void FixedUpdate()
     {
-
-        if (freeze_enemies_attack)
-        {
-            for (int i=0;i<enemies_freeze_attack_list.Count;i++)
-            {
-
-                float step = 100 * Time.deltaTime;
-                Vector3 velocity = enemies_freeze_attack_list[i].transform.position * 10;
-                if (freeze_attack_projectiles[i].transform.position != enemies_freeze_attack_list[i].transform.position) {
-
-                    freeze_attack_projectiles[i].transform.position = Vector3.MoveTowards(freeze_attack_projectiles[i].transform.position, enemies_freeze_attack_list[i].transform.position, step);
-
-                    if (freeze_attack_projectiles[i].transform.position == enemies_freeze_attack_list[i].transform.position)
-                    {
-                        GameObject ice_floor = Instantiate(prefab_icyfloor) as GameObject;
-                        ice_floor.transform.position = enemies_freeze_attack_list[i].transform.position;
-                        freezed_enemies++;
-                        if (freezed_enemies == enemies_freeze_attack_list.Count) {
-                            freezed_enemies = 0;
-                            freeze_enemies_attack = false;
-                        }
-                    }
-                }
-                
-            }
-        }
         if (Input.GetMouseButton(0))
         {
             RaycastHit hit;
@@ -117,8 +92,9 @@ public class ProjectileShooter : MonoBehaviour
                                 hit.point = hit.point.normalized;
                                 Rigidbody rb = projectile.GetComponent<Rigidbody>();
                                 a = hit.point;
-                                a.y = 0;
-                                rb.velocity = a * 100;
+                                Debug.Log(a);
+                                a.y = -0.01f;
+                                rb.velocity = a * 50;
 
                             }
 
@@ -148,10 +124,10 @@ public class ProjectileShooter : MonoBehaviour
         {
             Quaternion rotation = Quaternion.Euler(0, angle, 0);
             projectile.transform.position = GameObject.Find("weapon").transform.position + new Vector3(0, 0.86f, 0);
-            Debug.Log(hit_global.point + " " + hit_global.point.normalized);
+            //Debug.Log(hit_global.point + " " + hit_global.point.normalized);
             a = rotation * hit_global.point.normalized;
             projectile.transform.LookAt(rotation * hit_global.point);
-            a.y = 0;
+            a.y = -0.01f;
             projectile.GetComponent<Rigidbody>().velocity = rotation * a * 100;
             angle = angle - 2;
         }
@@ -159,22 +135,27 @@ public class ProjectileShooter : MonoBehaviour
     public void special_attack_2_function()
     {
         enemies_freeze_attack_list.Clear();
-        freeze_attack_projectiles.Clear();
+        ice_floor_list.Clear();
         freeze_enemies_attack = true;
         foreach (var enemy in FindObjectsOfType(typeof(GameObject)) as GameObject[])
         {
-            if (enemy.name == "Enemy")
+            if (enemy.name == "goblinv10(Clone)")
             {
                 enemies_freeze_attack_list.Add(enemy);
-                GameObject projectile = Instantiate(prefab_icyprojectile) as GameObject;
-                freeze_attack_projectiles.Add(projectile);
-                projectile.transform.position = new Vector3(0, 2.22f, 0);// GameObject.Find("Special Attack Button 2").transform.position + new Vector3(0, 2.22f, 0);
-                projectile.transform.LookAt(enemy.transform.position);
-                Rigidbody rb = projectile.GetComponent<Rigidbody>();
-                rb.useGravity = false;
+                GameObject ice_floor = Instantiate(prefab_icyfloor) as GameObject;
+                ice_floor.transform.position = enemy.transform.GetChild(1).position;
+                Destroy(ice_floor, 2);
+                /* GameObject projectile = Instantiate(prefab_icyprojectile) as GameObject;
+                 freeze_attack_projectiles.Add(projectile);
+                 projectile.transform.position = new Vector3(0, 2.22f, 0);// GameObject.Find("Special Attack Button 2").transform.position + new Vector3(0, 2.22f, 0);
+                 projectile.transform.LookAt(enemy.transform.GetChild(1).position);
+                 Rigidbody rb = projectile.GetComponent<Rigidbody>();
+                 rb.useGravity = false;*/
 
             }
         }
+
+        freeze_time = Time.time + freeze_time_delay;
     }
 }
 
