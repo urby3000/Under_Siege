@@ -1,18 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Threading;
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class ProjectileShooter : MonoBehaviour
 {
+    bool freeze_enemies_attack = false;
+    List<GameObject> enemies_freeze_attack_list = new List<GameObject>();
+    List<GameObject> freeze_attack_projectiles = new List<GameObject>();
+    int freezed_enemies=0;
+
     GameObject prefab_projectile;
+    GameObject prefab_icyprojectile;
+    GameObject prefab_icyfloor;
     float attackDelay = 1f;
     float nextDamageEvent;
     float nextSpecialAttack1;
+    float nextSpecialAttack2;
     float freeze_auto_attack;
     float specialAttack1Delay = 2f;
+    float specialAttack2Delay = 2f;
     float afterSpecialAttacksDelay = 0.5f;
     float afterSpecialAttacks;
     bool special_attack_1 = false;
@@ -22,8 +29,9 @@ public class ProjectileShooter : MonoBehaviour
     void Start()
     {
         prefab_projectile = Resources.Load("projectile") as GameObject;
-        GameObject.Find("zid").GetComponent<Renderer>().material.color = new Color(0.5f, 1, 1);
-        GameObject.Find("weapon").GetComponent<Renderer>().material.color = new Color(0, 0, 0);
+        prefab_icyfloor = Resources.Load("icy_floor") as GameObject;
+        prefab_icyprojectile = Resources.Load("ice_projectile") as GameObject;
+
     }
 
     void Update()
@@ -34,7 +42,31 @@ public class ProjectileShooter : MonoBehaviour
     void FixedUpdate()
     {
 
+        if (freeze_enemies_attack)
+        {
+            for (int i=0;i<enemies_freeze_attack_list.Count;i++)
+            {
 
+                float step = 100 * Time.deltaTime;
+                Vector3 velocity = enemies_freeze_attack_list[i].transform.position * 10;
+                if (freeze_attack_projectiles[i].transform.position != enemies_freeze_attack_list[i].transform.position) {
+
+                    freeze_attack_projectiles[i].transform.position = Vector3.MoveTowards(freeze_attack_projectiles[i].transform.position, enemies_freeze_attack_list[i].transform.position, step);
+
+                    if (freeze_attack_projectiles[i].transform.position == enemies_freeze_attack_list[i].transform.position)
+                    {
+                        GameObject ice_floor = Instantiate(prefab_icyfloor) as GameObject;
+                        ice_floor.transform.position = enemies_freeze_attack_list[i].transform.position;
+                        freezed_enemies++;
+                        if (freezed_enemies == enemies_freeze_attack_list.Count) {
+                            freezed_enemies = 0;
+                            freeze_enemies_attack = false;
+                        }
+                    }
+                }
+                
+            }
+        }
         if (Input.GetMouseButton(0))
         {
             RaycastHit hit;
@@ -47,7 +79,13 @@ public class ProjectileShooter : MonoBehaviour
                     nextSpecialAttack1 = Time.time + specialAttack1Delay;
                     freeze_auto_attack = Time.time + 0.3f;
                     special_attack_1 = true;
-                    GameObject.Find("weapon").GetComponent<Renderer>().material.color = new Color(255, 255, 255);
+                    GameObject.Find("weapon").GetComponent<Renderer>().material.color = new Color(0, 0, 0);
+                }
+                else if (Time.time >= nextSpecialAttack2 && hit.transform.gameObject.name == "Special Attack Button 2")
+                {
+                    nextSpecialAttack2 = Time.time + specialAttack2Delay;
+                    freeze_auto_attack = Time.time + 0.3f;
+                    special_attack_2_function();
                 }
                 else
                 {
@@ -55,16 +93,16 @@ public class ProjectileShooter : MonoBehaviour
                     {
                         if (special_attack_1)
                         {
-                            Debug.Log("Special attack");
+                            Debug.Log("Special attack 1");
                             special_attack_1 = false;
                             hit_global = hit;
                             special_attack_1_function();
                             Invoke("special_attack_1_function", 0.3f);
                             Invoke("special_attack_1_function", 0.6f);
-                            GameObject.Find("weapon").GetComponent<Renderer>().material.color = new Color(0, 0, 0);
+                            GameObject.Find("weapon").GetComponent<Renderer>().material.color = new Color(0.82f, 0.18f, 0.18f);
                             afterSpecialAttacks = Time.time + afterSpecialAttacksDelay;
                         }
-                        else if(Time.time>= afterSpecialAttacks)
+                        else if (Time.time >= afterSpecialAttacks)
                         {
                             a = hit.point;
                             a.x = a.x * 30;
@@ -94,8 +132,8 @@ public class ProjectileShooter : MonoBehaviour
         {
         }
     }
-    public void special_attack_1_function() {
-
+    public void special_attack_1_function()
+    {
         List<GameObject> projectiles = new List<GameObject>();
         for (int i = 0; i < 11; i++)
         {
@@ -106,16 +144,36 @@ public class ProjectileShooter : MonoBehaviour
         a.z = a.z * 30;
         GameObject.Find("weapon").transform.LookAt(a);
         int angle = 10;
-        for (int i = 0; i < 11; i++)
+        foreach (GameObject projectile in projectiles)
         {
             Quaternion rotation = Quaternion.Euler(0, angle, 0);
-            projectiles[i].transform.position = GameObject.Find("weapon").transform.position + new Vector3(0, 0.86f, 0);
+            projectile.transform.position = GameObject.Find("weapon").transform.position + new Vector3(0, 0.86f, 0);
             Debug.Log(hit_global.point + " " + hit_global.point.normalized);
             a = rotation * hit_global.point.normalized;
-            projectiles[i].transform.LookAt(rotation * hit_global.point);
+            projectile.transform.LookAt(rotation * hit_global.point);
             a.y = 0;
-            projectiles[i].GetComponent<Rigidbody>().velocity = rotation * a * 100;
+            projectile.GetComponent<Rigidbody>().velocity = rotation * a * 100;
             angle = angle - 2;
+        }
+    }
+    public void special_attack_2_function()
+    {
+        enemies_freeze_attack_list.Clear();
+        freeze_attack_projectiles.Clear();
+        freeze_enemies_attack = true;
+        foreach (var enemy in FindObjectsOfType(typeof(GameObject)) as GameObject[])
+        {
+            if (enemy.name == "Enemy")
+            {
+                enemies_freeze_attack_list.Add(enemy);
+                GameObject projectile = Instantiate(prefab_icyprojectile) as GameObject;
+                freeze_attack_projectiles.Add(projectile);
+                projectile.transform.position = new Vector3(0, 2.22f, 0);// GameObject.Find("Special Attack Button 2").transform.position + new Vector3(0, 2.22f, 0);
+                projectile.transform.LookAt(enemy.transform.position);
+                Rigidbody rb = projectile.GetComponent<Rigidbody>();
+                rb.useGravity = false;
+
+            }
         }
     }
 }
