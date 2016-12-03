@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CollisionDetection : MonoBehaviour {
 
-	void OnCollisionEnter(Collision col)
+	void OnTriggerEnter(Collider col)
     {
         if(col.gameObject.tag == "Player")
         {
@@ -15,7 +15,7 @@ public class CollisionDetection : MonoBehaviour {
             Enemy EnemyScript = theEnemy.GetComponent<Enemy>();
             EnemyScript.inRange = true;
             EnemyScript.moveSpeed = 0;
-
+            
         }
     }
 }
