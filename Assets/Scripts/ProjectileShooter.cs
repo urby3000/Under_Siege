@@ -14,7 +14,7 @@ public class ProjectileShooter : MonoBehaviour
     GameObject prefab_projectile;
     GameObject prefab_icyprojectile;
     GameObject prefab_icyfloor;
-    float attackDelay = 1f;
+    float attackDelay;//= 1f-PlayerPrefs.GetFloat("Attack_Speed");
     float nextDamageEvent;
     float nextSpecialAttack1;
     float nextSpecialAttack2;
@@ -29,6 +29,8 @@ public class ProjectileShooter : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        attackDelay = 1f - PlayerPrefs.GetFloat("Attack_Speed")/100;
+        print("attack delay: "+ attackDelay);
         prefab_projectile = Resources.Load("projectile") as GameObject;
         prefab_icyfloor = Resources.Load("icy_floor") as GameObject;
         prefab_icyprojectile = Resources.Load("ice_projectile") as GameObject;
@@ -82,6 +84,7 @@ public class ProjectileShooter : MonoBehaviour
                             a = hit.point;
                             a.x = a.x * 30;
                             a.z = a.z * 30;
+                            a.y = a.y * 30;
                             GameObject.Find("weapon").transform.LookAt(a);
                             if (Time.time >= nextDamageEvent)
                             {
@@ -89,11 +92,13 @@ public class ProjectileShooter : MonoBehaviour
                                 GameObject projectile = Instantiate(prefab_projectile) as GameObject;
                                 projectile.transform.position = GameObject.Find("weapon").transform.position + new Vector3(0, 0.5f, 0);
                                 projectile.transform.LookAt(hit.point);
-                                hit.point = hit.point.normalized;
+                                hit.point = hit.point;
                                 Rigidbody rb = projectile.GetComponent<Rigidbody>();
                                 a = hit.point;
-                                Debug.Log(a);
-                                a.y = -0.01f;
+                                //Debug.Log(a);
+                                a.y = a.y - 1f;
+                                //a.y = -0.01f;
+                                a=a.normalized;
                                 rb.velocity = a * 50;
 
                             }
@@ -127,7 +132,7 @@ public class ProjectileShooter : MonoBehaviour
             //Debug.Log(hit_global.point + " " + hit_global.point.normalized);
             a = rotation * hit_global.point.normalized;
             projectile.transform.LookAt(rotation * hit_global.point);
-            a.y = -0.01f;
+            a.y = -0.07f;
             projectile.GetComponent<Rigidbody>().velocity = rotation * a * 100;
             angle = angle - 2;
         }

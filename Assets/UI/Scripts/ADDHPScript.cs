@@ -6,15 +6,18 @@ public class ADDHPScript : MonoBehaviour {
 
     // Use this for initialization
     
-    private int currentHp = 0;
-    private int currentAD = 0;
-    private int currentATK = 0;
-    private int currentCRT = 0;
+
+
+
+    private float currentHp = 0;
+    private float currentAD = 0;
+    private float currentATK = 0;
+    private float currentCRT = 0;
     private int priceHP = 1;
     private int priceAD = 1;
     private int priceATK = 1;
     private int priceCRT = 1;
-    public int tocke = 100;
+    public float tocke = 100;
 
     GameObject goScore;
     Text score;
@@ -50,6 +53,20 @@ public class ADDHPScript : MonoBehaviour {
     void Start()
     {
 
+        print("Wall hp: " + PlayerPrefs.GetFloat("Wall_HP"));
+        print("Mage max hp: " + PlayerPrefs.GetFloat("Mage_Max_HP"));
+        print("goblin max hp: " + PlayerPrefs.GetFloat("Goblin_Max_HP"));
+        print("attack speed: " + PlayerPrefs.GetFloat("Attack_Speed"));
+        print("damage: " + PlayerPrefs.GetFloat("Damage"));
+        print("crit chance: " + PlayerPrefs.GetFloat("Crit_Chance"));
+        print("money: " + PlayerPrefs.GetFloat("Money"));
+
+        tocke = PlayerPrefs.GetFloat("Money");
+        currentHp = PlayerPrefs.GetFloat("Wall_HP");
+        currentAD = PlayerPrefs.GetFloat("Damage");
+        currentATK = PlayerPrefs.GetFloat("Attack_Speed");
+        currentCRT = PlayerPrefs.GetFloat("Crit_Chance");
+
         goScore = GameObject.Find("ScoreText");
         score = goScore.GetComponent<Text>();
         score.text = tocke + "";
@@ -57,6 +74,7 @@ public class ADDHPScript : MonoBehaviour {
         hp = GameObject.Find("HPText");
         hpText = hp.GetComponent<Text>();
         hpText.text = "HP: " + currentHp;
+
         goPriceHP = GameObject.Find("PriceHPText");
         priceHPP = goPriceHP.GetComponent<Text>();
         priceHPP.text = "Price: " + priceHP;
@@ -66,7 +84,7 @@ public class ADDHPScript : MonoBehaviour {
         adText.text = "AD: " + currentAD;
         goPriceAD = GameObject.Find("ADPriceText");
         priceADD = goPriceAD.GetComponent<Text>();
-        priceADD.text = "Price: " + priceHP;
+        priceADD.text = "Price: " + priceAD;
 
         goATK = GameObject.Find("ATKText");
         atkText = goATK.GetComponent<Text>();
@@ -81,6 +99,23 @@ public class ADDHPScript : MonoBehaviour {
         goPriceCRT = GameObject.Find("CRTPriceText");
         priceCRTT = goPriceCRT.GetComponent<Text>();
         priceCRTT.text = "Price: " + priceCRT;
+
+        HP = GameObject.Find("PlusButtonHP").GetComponent<Button>();
+        HP.onClick.AddListener(AddHP);
+
+        HP = GameObject.Find("PlusButtonAD").GetComponent<Button>();
+        HP.onClick.AddListener(AddAD);
+
+        HP = GameObject.Find("PlusButtonATK").GetComponent<Button>();
+        HP.onClick.AddListener(AddATK);
+
+        HP = GameObject.Find("PlusButtonHPCRT").GetComponent<Button>();
+        HP.onClick.AddListener(AddCRT);
+
+
+
+
+
     }
     void Update()
     {
@@ -98,20 +133,23 @@ public class ADDHPScript : MonoBehaviour {
         goPriceHP = GameObject.Find("PriceHPText");
         priceHPP = goPriceHP.GetComponent<Text>();
 
-        int temp = tocke - priceHP;
+        float temp = tocke - priceHP;
         
         if(temp >= 0)
         {
-            int tmp = tocke - priceHP;
+            PlayerPrefs.SetFloat("Wall_HP",PlayerPrefs.GetFloat("Wall_HP")+10);
+            float tmp = tocke - priceHP;
             tocke = tmp;
+            PlayerPrefs.SetFloat("Money", tmp);
             score.text = "" + tocke;
 
-            currentHp = currentHp + 1;
+            currentHp = currentHp + 10;
             hpText.text = "HP: " + currentHp;
+            print(currentHp);
 
 
-            priceHP = priceHP + 5;
-            priceHPP.text = "Price: " + priceHP;
+            //priceHP = priceHP + 5;
+            //priceHPP.text = "Price: " + priceHP;
         }
         else
         {
@@ -125,8 +163,8 @@ public class ADDHPScript : MonoBehaviour {
 
     public void AddAD()
     {
-       // goScore = GameObject.Find("ScoreText");
-       // score = goScore.GetComponent<Text>();
+        // goScore = GameObject.Find("ScoreText");
+        // score = goScore.GetComponent<Text>();
 
         goAD = GameObject.Find("ADText");
         adText = goAD.GetComponent<Text>();
@@ -134,20 +172,22 @@ public class ADDHPScript : MonoBehaviour {
         goPriceAD = GameObject.Find("ADPriceText");
         priceADD = goPriceAD.GetComponent<Text>();
 
-        int temp = tocke - priceAD;
+        float temp = tocke - priceAD;
 
         if (temp >= 0)
         {
-            int tmp = tocke - priceAD;
+            PlayerPrefs.SetFloat("Damage", PlayerPrefs.GetFloat("Damage") + 1);
+            float tmp = tocke - priceAD;
             tocke = tmp;
+            PlayerPrefs.SetFloat("Money", tmp);
             score.text = "" + tocke;
 
             currentAD = currentAD + 1;
             adText.text = "AD: " + currentAD;
 
 
-            priceAD = priceAD + 5;
-            priceADD.text = "Price: " + priceAD;
+            //priceAD = priceAD + 5;
+            //priceADD.text = "Price: " + priceAD;
         }
         else
         {
@@ -169,19 +209,21 @@ public class ADDHPScript : MonoBehaviour {
         goPriceATK = GameObject.Find("ATKPriceText");
         priceATKK = goPriceATK.GetComponent<Text>();
 
-        int temp = tocke - priceATK;
+        float temp = tocke - priceATK;
 
         if (temp >= 0)
         {
+            PlayerPrefs.SetFloat("Attack_Speed", PlayerPrefs.GetFloat("Attack_Speed") + 1);
             tocke = tocke - priceATK;
             score.text = "" + tocke;
 
+            PlayerPrefs.SetFloat("Money", temp);
             currentATK = currentATK + 1;
             atkText.text = "ATK: " + currentATK;
 
 
-            priceATK = priceATK + 5;
-            priceATKK.text = "Price: " + priceATK;
+            //priceATK = priceATK + 5;
+            //priceATKK.text = "Price: " + priceATK;
         }
         else
         {
@@ -203,20 +245,22 @@ public class ADDHPScript : MonoBehaviour {
         goPriceCRT = GameObject.Find("CRTPriceText");
         priceCRTT = goPriceCRT.GetComponent<Text>();
 
-        int temp = tocke - priceCRT;
+        float temp = tocke - priceCRT;
 
         if (temp >= 0)
         {
-            
+            PlayerPrefs.SetFloat("Crit_Chance", PlayerPrefs.GetFloat("Crit_Chance") + 1);
+
             tocke = tocke - priceCRT;
             score.text = "" + tocke;
 
+            PlayerPrefs.SetFloat("Money", temp);
             currentCRT = currentCRT + 1;
             crtText.text = "CRT: " + currentCRT;
 
 
-            priceCRT = priceCRT + 5;
-            priceCRTT.text = "Price: " + priceCRT;
+            //priceCRT = priceCRT + 5;
+            //priceCRTT.text = "Price: " + priceCRT;
         }
         else
         {
