@@ -17,11 +17,11 @@ public class DamageTaking : MonoBehaviour {
 
     void OnCollisionEnter(Collision collisionInfo)
     {
-        Variables a = collisionInfo.collider.GetComponent<Variables>();
+        /*Variables a = collisionInfo.collider.GetComponent<Variables>();
         float score = a.getDamage();
         health = health - score;
 
-        Debug.Log("Health: " + health);
+        Debug.Log("Health: " + health);*/
         /*Debug.Log("Detected collision between " + gameObject.name + " and " + collisionInfo.collider.name);
         Debug.Log("There are " + collisionInfo.contacts.Length + " point(s) of contacts");
         Debug.Log("Their relative velocity is " + collisionInfo.relativeVelocity);*/

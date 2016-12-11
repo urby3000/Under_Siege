@@ -33,7 +33,6 @@ public class ProjectileShooter : MonoBehaviour
         print("attack delay: "+ attackDelay);
         prefab_projectile = Resources.Load("projectile") as GameObject;
         prefab_icyfloor = Resources.Load("icy_floor") as GameObject;
-        prefab_icyprojectile = Resources.Load("ice_projectile") as GameObject;
 
     }
 

@@ -72,8 +72,8 @@
     <Compile Include="Assets\Scripts\DamageTaking.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\ProjectileScript.cs" />
     <Compile Include="Assets\Scripts\ProjectileShooter.cs" />
-    <Compile Include="Assets\Scripts\Variables.cs" />
     <Compile Include="Assets\Scripts\Wall.cs" />
     <Compile Include="Assets\Scripts\WallScript.cs" />
     <Compile Include="Assets\Scripts\spawn.cs" />
@@ -98,6 +98,8 @@
     <Compile Include="Assets\fireBall.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Necromancer GUI\Kingthings.txt" />
+    <None Include="Assets\Necromancer GUI\Readme.txt" />
     <None Include="Assets\UI\Fonts\Jupiter\LICENSE.txt" />
     <None Include="Assets\UI\Materials\UI-Default-No-Alpha.shader" />
     <None Include="Assets\UI\Textures and Sprites\SF UI\Background\LICENSE.txt" />
