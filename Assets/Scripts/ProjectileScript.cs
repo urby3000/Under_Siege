@@ -22,13 +22,13 @@ public class ProjectileScript : MonoBehaviour
         {
             ParticleSystem hit = (ParticleSystem)Instantiate(on_hit_green, collision.contacts[0].point, new Quaternion());
             Destroy(hit, 1);
-            Destroy(gameObject, 3);
+            Destroy(gameObject, 1.1f);
         }
         else
         {
             ParticleSystem hit = (ParticleSystem)Instantiate(on_hit, collision.contacts[0].point, new Quaternion());
             Destroy(hit, 1);
-            Destroy(gameObject, 3);
+            Destroy(gameObject, 1.1f);
         }
     }
 }

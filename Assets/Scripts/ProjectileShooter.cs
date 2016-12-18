@@ -55,7 +55,7 @@ public class ProjectileShooter : MonoBehaviour
                     nextSpecialAttack1 = Time.time + specialAttack1Delay;
                     freeze_auto_attack = Time.time + 0.3f;
                     special_attack_1 = true;
-                    GameObject.Find("weapon").GetComponent<Renderer>().material.color = new Color(0, 0, 0);
+                   // GameObject.Find("weapon").GetComponent<Renderer>().material.color = new Color(0, 0, 0);
                 }
                 else if (Time.time >= nextSpecialAttack2 && hit.transform.gameObject.name == "Special Attack Button 2")
                 {
@@ -75,7 +75,7 @@ public class ProjectileShooter : MonoBehaviour
                             special_attack_1_function();
                             Invoke("special_attack_1_function", 0.3f);
                             Invoke("special_attack_1_function", 0.6f);
-                            GameObject.Find("weapon").GetComponent<Renderer>().material.color = new Color(0.82f, 0.18f, 0.18f);
+                            //GameObject.Find("weapon").GetComponent<Renderer>().material.color = new Color(0.82f, 0.18f, 0.18f);
                             afterSpecialAttacks = Time.time + afterSpecialAttacksDelay;
                         }
                         else if (Time.time >= afterSpecialAttacks)
@@ -95,7 +95,7 @@ public class ProjectileShooter : MonoBehaviour
                                 Rigidbody rb = projectile.GetComponent<Rigidbody>();
                                 a = hit.point;
                                 //Debug.Log(a);
-                                a.y = a.y - 1f;
+                                a.y = a.y - 1.5f;
                                 //a.y = -0.01f;
                                 a=a.normalized;
                                 rb.velocity = a * 50;

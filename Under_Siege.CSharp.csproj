@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\ProjectileScript.cs" />
     <Compile Include="Assets\Scripts\ProjectileShooter.cs" />
+    <Compile Include="Assets\Scripts\Variables.cs" />
     <Compile Include="Assets\Scripts\Wall.cs" />
     <Compile Include="Assets\Scripts\WallScript.cs" />
     <Compile Include="Assets\Scripts\spawn.cs" />
