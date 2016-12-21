@@ -3,13 +3,14 @@ using System.Collections;
 
 public class Wall : MonoBehaviour {
 
-    public static int wallHealth = 500;
+    public static float wallHealth = 500;
     //public GameObject Wall
 
 	// Use this for initialization
 	void Start () {
+        wallHealth = PlayerPrefs.GetFloat("Wall_HP");
 
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {

@@ -18,12 +18,13 @@ public class GameManager : MonoBehaviour {
         
 
         current_hp = PlayerPrefs.GetFloat("Current_hp");
-        PlayerPrefs.SetFloat("Mage_Max_HP",3);
-        PlayerPrefs.SetFloat("Goblin_Max_HP", 3);
+        PlayerPrefs.SetFloat("Mage_Max_HP",12);
+        PlayerPrefs.SetFloat("Goblin_Max_HP", 12);
     }
 	
 	// Update is called once per frame
 	void Update () {
+        current_hp = PlayerPrefs.GetFloat("Current_hp");
         if (current_hp <= 0) {
             Time.timeScale = 0;
         }

@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour {
     }
 
     
-    void Start () {
+    void Start() { 
         hp = PlayerPrefs.GetFloat("Goblin_Max_HP");
     }
 
@@ -98,11 +98,12 @@ public class Enemy : MonoBehaviour {
     //Koda za freeze
     void OnCollisionEnter(Collision collisionInfo)
     {
-        print("Detected collision between " + gameObject.name + " and " + collisionInfo.collider.name);
+       // print("Detected collision between " + gameObject.name + " and " + collisionInfo.collider.name);
         if (collisionInfo.collider.name == "projectile(Clone)")
         {
+            collisionInfo.collider.enabled = false;
             //uzem hp
-            print("uzem");
+            //print("uzem");
             System.Random ran = new System.Random();
             float randy = ran.Next(0, 1);
             if (randy > PlayerPrefs.GetFloat("Crit_Chance")/100) //%30 percent chance (1 - 0.7 is 0.3)
@@ -121,12 +122,16 @@ public class Enemy : MonoBehaviour {
             }
 
         }
-        if (collisionInfo.collider.name == "icy_floor(Clone)")
-        {
-            freeze_enemy = true;
-            ice_floor = collisionInfo.gameObject;
-        }
+       
         /* print("There are " + collisionInfo.contacts.Length + " point(s) of contacts");
          print("Their relative velocity is " + collisionInfo.relativeVelocity);*/
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.name== "ice_rock(Clone)")
+        {
+            freeze_enemy = true;
+            ice_floor = other.gameObject;
+        }
     }
 }

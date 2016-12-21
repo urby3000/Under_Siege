@@ -30,9 +30,9 @@ public class ProjectileShooter : MonoBehaviour
     void Start()
     {
         attackDelay = 1f - PlayerPrefs.GetFloat("Attack_Speed")/100;
-        print("attack delay: "+ attackDelay);
+       // print("attack delay: "+ attackDelay);
         prefab_projectile = Resources.Load("projectile") as GameObject;
-        prefab_icyfloor = Resources.Load("icy_floor") as GameObject;
+        prefab_icyfloor = Resources.Load("ice_rock") as GameObject;
 
     }
 
@@ -69,36 +69,26 @@ public class ProjectileShooter : MonoBehaviour
                     {
                         if (special_attack_1)
                         {
-                            Debug.Log("Special attack 1");
                             special_attack_1 = false;
                             hit_global = hit;
                             special_attack_1_function();
-                            Invoke("special_attack_1_function", 0.3f);
                             Invoke("special_attack_1_function", 0.6f);
                             //GameObject.Find("weapon").GetComponent<Renderer>().material.color = new Color(0.82f, 0.18f, 0.18f);
                             afterSpecialAttacks = Time.time + afterSpecialAttacksDelay;
                         }
                         else if (Time.time >= afterSpecialAttacks)
                         {
-                            a = hit.point;
-                            a.x = a.x * 30;
-                            a.z = a.z * 30;
-                            a.y = a.y * 30;
-                            GameObject.Find("weapon").transform.LookAt(a);
+                            GameObject.Find("weapon").transform.LookAt(hit.point*30);
                             if (Time.time >= nextDamageEvent)
                             {
                                 nextDamageEvent = Time.time + attackDelay;
                                 GameObject projectile = Instantiate(prefab_projectile) as GameObject;
-                                projectile.transform.position = GameObject.Find("weapon").transform.position + new Vector3(0, 0.5f, 0);
-                                projectile.transform.LookAt(hit.point);
-                                hit.point = hit.point;
-                                Rigidbody rb = projectile.GetComponent<Rigidbody>();
+                                projectile.transform.position = GameObject.Find("weapon").transform.position;
                                 a = hit.point;
-                                //Debug.Log(a);
-                                a.y = a.y - 1.5f;
-                                //a.y = -0.01f;
-                                a=a.normalized;
-                                rb.velocity = a * 50;
+                                a = a.normalized;
+                                a.y = 0.001f;
+                                projectile.transform.LookAt(a*50);
+                                projectile.GetComponent<Rigidbody>().velocity = projectile.transform.forward * 50;
 
                             }
 
@@ -114,26 +104,19 @@ public class ProjectileShooter : MonoBehaviour
     }
     public void special_attack_1_function()
     {
-        List<GameObject> projectiles = new List<GameObject>();
-        for (int i = 0; i < 11; i++)
+        GameObject projectile;
+        GameObject.Find("weapon").transform.LookAt(hit_global.point * 30);
+        int angle = 2;
+        for (int i = 0; i < 2; i++)
         {
-            projectiles.Add(Instantiate(prefab_projectile) as GameObject);
-        }
-        a = hit_global.point;
-        a.x = a.x * 30;
-        a.z = a.z * 30;
-        GameObject.Find("weapon").transform.LookAt(a);
-        int angle = 10;
-        foreach (GameObject projectile in projectiles)
-        {
+            projectile=Instantiate(prefab_projectile) as GameObject;
             Quaternion rotation = Quaternion.Euler(0, angle, 0);
-            projectile.transform.position = GameObject.Find("weapon").transform.position + new Vector3(0, 0.86f, 0);
-            //Debug.Log(hit_global.point + " " + hit_global.point.normalized);
-            a = rotation * hit_global.point.normalized;
-            projectile.transform.LookAt(rotation * hit_global.point);
-            a.y = -0.07f;
-            projectile.GetComponent<Rigidbody>().velocity = rotation * a * 100;
-            angle = angle - 2;
+            projectile.transform.position = GameObject.Find("weapon").transform.position;
+            a = rotation * hit_global.point;
+            projectile.transform.LookAt(a);
+            projectile.GetComponent<Rigidbody>().velocity = projectile.transform.forward * 40;
+            angle = angle - 4;
+
         }
     }
     public void special_attack_2_function()
@@ -149,12 +132,6 @@ public class ProjectileShooter : MonoBehaviour
                 GameObject ice_floor = Instantiate(prefab_icyfloor) as GameObject;
                 ice_floor.transform.position = enemy.transform.GetChild(1).position;
                 Destroy(ice_floor, 2);
-                /* GameObject projectile = Instantiate(prefab_icyprojectile) as GameObject;
-                 freeze_attack_projectiles.Add(projectile);
-                 projectile.transform.position = new Vector3(0, 2.22f, 0);// GameObject.Find("Special Attack Button 2").transform.position + new Vector3(0, 2.22f, 0);
-                 projectile.transform.LookAt(enemy.transform.GetChild(1).position);
-                 Rigidbody rb = projectile.GetComponent<Rigidbody>();
-                 rb.useGravity = false;*/
 
             }
         }
