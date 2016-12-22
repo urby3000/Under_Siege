@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/weapon_testing/Skupaj/weapon_monsterji.unity
+- path: Assets/UI/test_menu.unity
   isLoaded: 1
   isActive: 1

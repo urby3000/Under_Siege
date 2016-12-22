@@ -48,8 +48,8 @@ public class ProjectileShooter : MonoBehaviour
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray.origin, ray.direction, out hit, Mathf.Infinity))
-            { //Debug.DrawRay(ray.origin, ray.direction * 1000);
-              //Debug.Log(hit.point);
+            { Debug.DrawRay(ray.origin, ray.direction * 1000);
+              Debug.Log(hit.point);
                 if (Time.time >= nextSpecialAttack1 && hit.transform.gameObject.name == "Special Attack Button 1")
                 {
                     nextSpecialAttack1 = Time.time + specialAttack1Delay;

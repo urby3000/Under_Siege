@@ -38,7 +38,6 @@ public class Enemy : MonoBehaviour {
             moveSpeed = 1f;
         }
         //Kreni proti tarči
-        myTransform.position += myTransform.forward * moveSpeed * Time.deltaTime;
 
         if (inRange == true)
         {
@@ -48,6 +47,7 @@ public class Enemy : MonoBehaviour {
         else
         {
             Walk();
+            myTransform.position += myTransform.forward * moveSpeed * Time.deltaTime;
         }
 
     }
